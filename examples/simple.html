@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Messagist - Simple</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <messagist> </messagist>
+    </div>
+    <script src="../dist/messagist.js"></script>
+    <script>
+      Vue.component('messagist', Messagist)
+
+      new Vue({
+        el: '#app',
+        data: {
+          messages: {
+            init: {
+              content: [],
+              choices: {
+                accept: 'Okay Messagist, I accept that ♥️'
+              }
+            },
+            accept: {
+              content: '🎉🎉🎉 That makes me happy'
+            }
+          }
+        }
+      })
+    </script>
+  </body>
+</html>
