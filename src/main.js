@@ -2,6 +2,6 @@ import MessagistChat from './MessagistChat.vue'
 
 
 
-Vue.component('messagist',  MessagistChat)
+// Vue.component('messagist',  MessagistChat)
 
 export default MessagistChat

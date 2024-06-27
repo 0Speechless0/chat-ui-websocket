@@ -1,13 +1,13 @@
 {
-  "name": "vue-messagist",
-  "version": "0.1.0",
+  "name": "chat-ui-websocket",
+  "version": "0.1.1",
   "description": "Configurable interface for conversational user engagement",
   "main": "dist/messagist.js",
   "files": [
     "dist/*.js",
     "dist/*.map"
   ],
-  "repository": "https://github.com/codebryo/messagist.git",
+  "repository": "https://github.com/0Speechless0/chat-ui-websocket.git",
   "author": "coffee2 <kbb37038106@gmail.com>",
   "license": "MIT",
   "scripts": {

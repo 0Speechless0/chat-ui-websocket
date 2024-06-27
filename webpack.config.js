@@ -53,7 +53,6 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.DefinePlugin({
       'process.env': {
         NODE_ENV: '"production"',
-        WEBSOCKET_URL: process.env.WEBSOCKET_URL ?? "https://59.126.242.4:8084/websocket"
       }
     }),
     new webpack.optimize.UglifyJsPlugin({

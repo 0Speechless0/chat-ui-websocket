@@ -7,9 +7,15 @@
         :message="message"
         class="messagist__list-item"
       />
-    </transition-group>
 
-    <div
+    </transition-group>
+    
+      <Dot v-if="loading">
+
+      </Dot>
+      <div
+
+
       
       class="messagist__choices"
       v-if="choicesVisible "
@@ -23,9 +29,7 @@
         class="messagist__choices-list-item"
       />
     </div>
-    <div class="stage" v-if="loading">
-            <div class="dot-stretching"></div>
-          </div>
+
   </div>
 
 </template>
@@ -34,6 +38,7 @@
 import uuidv4 from 'uuid/v4'
 import Message from './Message.vue'
 import Choice from './Choice.vue'
+import Dot from './Dot.vue'
 var client = require("../client");
 class MessageObject {
   constructor(text, author="system") {
@@ -52,7 +57,8 @@ export default {
 
   components: {
     message: Message,
-    choice: Choice
+    choice: Choice,
+    Dot : Dot
   },
 
   data() {

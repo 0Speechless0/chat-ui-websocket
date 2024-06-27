@@ -2,7 +2,7 @@
 var websocket = false;
 var ws = undefined;
 var responseHandler  = null;
-
+var WEBSOCKET_URL 
 if ("WebSocket" in window){
 	  websocket = true;
     }else{
@@ -13,7 +13,7 @@ function open_ws(msg)  {
   if( !ws || ws.readyState === undefined || ws.readyState > 1){
 
     // websocket on same server with address /websocket
-      ws = new WebSocket(process.env.WEBSOCKET_URL);
+      ws = new WebSocket(WEBSOCKET_URL);
       console.log("CCCC", ws)
       ws.onopen = function(){
           // Web Socket is connected, send data using send()
@@ -65,7 +65,10 @@ module.exports = class WebSocketClient {
   open_ws (msg)  {
       open_ws(msg);
   }
-
+  setWebSocketURL(url)
+  {
+    WEBSOCKET_URL = url
+  }
 
 }
 

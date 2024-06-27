@@ -751,6 +751,7 @@
   */
  .dot-stretching {
     margin-left: 80px;
+    margin-bottom: 80px;
    position: relative;
    width: 10px;
    height: 10px;

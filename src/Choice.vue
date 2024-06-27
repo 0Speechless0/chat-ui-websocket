@@ -1,7 +1,7 @@
 <template lang="html">
     <div>
       <div style="display: flex;" >
-        <input type="text" autocomplete="off" placeholder="請輸入內容，按enter發送" class="el-input__inner" v-model="text" :ref="`textinput`" @keyup.enter="send"> 
+        <input type="text"   autocomplete="off" placeholder="請輸入內容，按enter發送" class="el-input__inner" v-model="text" :ref="`textinput`" @keyup.enter="send"> 
       </div>
       <!-- <div>
         <a
@@ -35,6 +35,7 @@ export default {
   },
 
   computed: {
+
     // isObject() {
     //   return typeof this.choice === 'object'
     // },
@@ -60,7 +61,8 @@ export default {
     },
 
     send() {
-      this.$emit('selected', { custom : this.text, key : this.primaryKey })
+      console.log("AA", this.text.match(/.{1,25}/g).reduce((a, c) => a+ c +"\n", ""));
+      this.$emit('selected', { custom : this.text.match(/.{1,30}/g).reduce((a, c) => a+ (a =="" ? "" : "<br />") + c, ""), key : this.primaryKey })
     },
     focusInput()
     {
