@@ -14,11 +14,9 @@
 
       </Dot>
       <div
-
-
-      
-      class="messagist__choices"
-      v-if="choicesVisible "
+      v-if="!claim"
+      class="fixed-bottom" style="width:800px   ;border: 1px solid rgba(0, 0, 0, .2);
+      background-color: white;     margin-left: auto; margin-right: 10%;"
     >
       <choice
         v-for="(value, key) in current.choices"
@@ -26,6 +24,7 @@
         :primaryKey="key"
         :choice="value"
         @selected="selected"
+        style="margin-right:0px"
         class="messagist__choices-list-item"
       />
     </div>
@@ -35,24 +34,21 @@
 </template>
 
 <script>
-import uuidv4 from 'uuid/v4'
+
 import Message from './Message.vue'
 import Choice from './Choice.vue'
 import Dot from './Dot.vue'
+var  MessageObject = require("./MessageObject");
 var client = require("../client");
-class MessageObject {
-  constructor(text, author="system") {
-    this.text = text
-    this.author = author
-    this.id = uuidv4()
-  }
-}
+
 
 export default {
   name: 'Messagist',
 
   props: {
-    messages: Object
+    messages: Object,
+    claim :  Boolean,
+    messagesToPrintOrg : Array
   },
 
   components: {
@@ -60,7 +56,7 @@ export default {
     choice: Choice,
     Dot : Dot
   },
-
+  emits: ["choices"],
   data() {
     return {
       messagesToPrint: [],
@@ -162,7 +158,7 @@ export default {
 
       this.currentKey = key
       const setResponseMessage = (message) => {
-        this.messages.accept.content = message 
+        this.messages.accept.content = message.replaceAll("\n", "<br>")
         this.awaitingUserInput = false
         this.done = true;
         this.delayPrint()
@@ -175,7 +171,8 @@ export default {
   },
 
   mounted() {
-
+    if( this.messagesToPrintOrg )
+      this.messagesToPrint = this.messagesToPrintOrg;
     this.printLoop()
   }
 }
@@ -186,10 +183,10 @@ export default {
 @import '../assets/styles/dot-loading.css';
 .Messagist
   max-width 640px
-  margin 0 auto
+  margin 0 auto 
 
   ul
-    padding 20px 50px
+    padding 30px 40px
 
 .messagist__list-item
   transition all 500ms

@@ -1,7 +1,10 @@
 <template lang="html">
-  <li :class="cssClass" >
-    <span v-html="message.text" />
+  <li :class="cssClass" v-if="!isHTML(message.text)">
+      <span v-html="message.text" />
   </li>
+  <div v-else v-html="message.text">
+
+  </div>
 </template>
 
 
@@ -12,7 +15,20 @@ export default {
   props: {
     message: Object
   },
+  methods: {
 
+    isHTML(str) {
+      var a = document.createElement('div');
+      a.innerHTML = str;
+
+      for (var c = a.childNodes, i = c.length; i--;) {
+        if(c[i].nodeName =='BR') continue
+        if (c[i].nodeType == 1) return true;
+      }
+
+      return false;
+    }
+  },
   computed: {
     cssClass() {
       return `messagist__list-item-${this.message.author}`

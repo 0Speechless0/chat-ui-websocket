@@ -29,6 +29,17 @@ module.exports = {
         test: /\.js$/,
         loader: 'babel-loader',
         exclude: /node_modules/
+      },
+      {
+        test: /\.(png|jpg|gif|jpe?g|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]'
+            }  
+          }
+        ]
       }
     ]
   },
@@ -62,7 +73,13 @@ if (process.env.NODE_ENV === 'production') {
       }
     }),
     new webpack.LoaderOptionsPlugin({
-      minimize: true
+      minimize: true,
+      options: {
+        sassLoader: {
+            includePaths: [path.resolve(__dirname, 'src', 'scss')]
+        },
+        context: '/'
+    }
     })
   ])
 }
