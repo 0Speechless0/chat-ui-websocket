@@ -86,7 +86,11 @@ export default {
     },
 
     send() {
-      if(!this.text ) alert("請輸入文字")
+      if(!this.text ){ 
+        
+        alert("請輸入文字")
+        return ;
+      }
       console.log("AA", this.text.match(/.{1,25}/g).reduce((a, c) => a + c + "\n", ""));
       this.$emit('selected', { custom: this.text.match(/.{1,30}/g).reduce((a, c) => a + (a == "" ? "" : "<br />") + c, ""), key: this.primaryKey })
     },
