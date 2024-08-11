@@ -1,5 +1,8 @@
 <template lang="html">
+
   <li :class="cssClass" v-if="!isHTML(message.text)">
+      <!-- <img src="../assets/image/user.jpg"/>  -->
+      <img  class="userImage" width="50"/>
       <span v-html="message.text" />
   </li>
   <div v-else v-html="message.text">
@@ -33,19 +36,24 @@ export default {
     cssClass() {
       return `messagist__list-item-${this.message.author}`
     }
+  },
+  mounted()
+  {
+
   }
 }
 </script>
 
 <style lang="stylus">
+@import '../assets/styles/userImage.css';
 color-system = aliceblue
 color-user = #b3e6a6
-
 transparent-body()
   content ''
   display block
   position absolute
   border 8px solid transparent
+
 
 .messagist__list-item
   list-style none
