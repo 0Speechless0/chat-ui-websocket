@@ -15,15 +15,39 @@
           開啟
       </button>
       {{messages.accept.content}}
-      <messagist websocket_url="https://59.126.242.4:8084/websocket" width="800px" v-show="visiable" v-on:cancel="close"> </messagist>
+      <messagist websocket_url="https://59.126.242.4:8084/websocket" 
+      v-bind:init_content="                        `為保護您的權益，請詳細閱讀「 隱私權及個人資料保護政策 」，如您已充分瞭解並同意，請繼續進行對談服務。
+          <br><br>
+          點選 隱私權及個人資料保護政策如附件pdf`"
+      v-bind:api_action="API"  width="500px" v-show="visiable" v-on:cancel="close"> </messagist>
     </div>
     <script src="../dist/messagist.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script>
       Vue.component('messagist', Messagist)
 
       new Vue({
         el: '#app',
         data: {
+          API : {
+            GetUserMessages : (result) => {
+
+              axios.post("https://localhost:44300/InteliAgency/GetUserMessages", {userSeq : 1})
+              .then((resp) => {
+                result(resp)
+                console.log("resp", resp)
+              });
+
+            },
+            StoreUserMessage : (data, result) => {
+              data.UserMainSeq = 1;
+              axios.post("https://localhost:44300/InteliAgency/StoreUserMessage", {vm : data})
+              .then((resp) => {
+                if(result)
+                  result(resp);
+              });
+            }
+          },
           visiable  : true,
           messages: {
             init: {

@@ -1,6 +1,6 @@
 <template>
   <div class="Messagist" >
-    <transition-group name="messagist__list" tag="ul">
+    <transition-group name="messagist__list" tag="ul" v-if="done || claim" style="padding-bottom:0px">
       <message
         v-for="message in messagesToPrint"
         :key="message.id"
@@ -15,7 +15,7 @@
       </Dot>
       <div
       v-if="!claim"
-      class="fixed-bottom" style="width:800px   ;border: 1px solid rgba(0, 0, 0, .2);
+      class="fixed-bottom" style="width:500px   ;border: 1px solid rgba(0, 0, 0, .2);
       background-color: white;     margin-left: auto; margin-right: 10%;"
     >
       <choice
@@ -46,6 +46,7 @@ export default {
   name: 'Messagist',
 
   props: {
+    isNewDialog: Boolean,
     messages: Object,
     claim :  Boolean,
     messagesToPrintOrg : Array
@@ -142,7 +143,20 @@ export default {
 
       const print = (m) => {
         if(m)
-          this.messagesToPrint.push(new MessageObject(m))
+        {
+          var AgencyMessageObject = new MessageObject(m);
+
+          if(this.isNewDialog)
+          {
+            Vue.prototype.$API.StoreUserMessage({
+              Origin : 0,
+              Text : m
+            });
+          }
+
+          this.messagesToPrint.push(AgencyMessageObject )
+        }
+
 
         this.$nextTick(loop)
       }
@@ -153,8 +167,13 @@ export default {
     selected({ key, custom}) {
       const message = custom ? custom : this.current.choices[key]
       console.log("message", message);
-
-      this.messagesToPrint.push(new MessageObject( message ,'user'))
+      var ClientMessageObject = new MessageObject( message ,'user');
+      if(this.isNewDialog)
+        Vue.prototype.$API.StoreUserMessage({
+              Origin : 1,
+              Text : message
+        });
+      this.messagesToPrint.push(ClientMessageObject)
 
       this.currentKey = key
       const setResponseMessage = (message) => {
@@ -173,6 +192,8 @@ export default {
   mounted() {
     if( this.messagesToPrintOrg )
       this.messagesToPrint = this.messagesToPrintOrg;
+
+    console.log("isNewDialog", this.isNewDialog);
     this.printLoop()
   }
 }

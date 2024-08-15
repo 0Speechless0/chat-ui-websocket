@@ -12,7 +12,7 @@
     " class="btn btn-light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             fill="#01afb8" height="50px" width="50px" version="1.1" id="Layer_1" viewBox="0 0 512 512"
             xml:space="preserve" style="
-        width: 100px;
+        width: 50px;
         height: 25px;
     ">
             <g>
@@ -24,7 +24,7 @@
             </g>
           </svg></button></div>
     </div>
-    <div class="d-flex justify-content-center m-1" >
+    <div class="d-flex justify-content-left m-1" >
       <button class="btn btn-light m-1"  style="color:rgb(1, 175, 184)">新手專區</button>
       <button class="btn btn-light m-1" style="color:rgb(1, 175, 184)">常見問題</button>
 

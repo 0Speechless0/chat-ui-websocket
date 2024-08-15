@@ -1,6 +1,6 @@
 {
   "name": "chat-ui-websocket",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Configurable interface for conversational user engagement",
   "main": "dist/messagist.js",
   "files": [

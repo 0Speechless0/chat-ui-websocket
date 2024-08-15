@@ -4,6 +4,7 @@
       <!-- <img src="../assets/image/user.jpg"/>  -->
       <img  class="userImage" width="50"/>
       <span v-html="message.text" />
+      <div style="color:#b4b1b1">{{ message.createTime }} </div>
   </li>
   <div v-else v-html="message.text">
 
@@ -34,12 +35,16 @@ export default {
   },
   computed: {
     cssClass() {
-      return `messagist__list-item-${this.message.author}`
+      if(this.message.author == "system")
+        return `messagist__list-item-${this.message.author} `
+      else
+        return `messagist__list-item-${this.message.author} `
     }
   },
   mounted()
   {
 
+    console.log("mounted message");
   }
 }
 </script>
