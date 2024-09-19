@@ -16,14 +16,13 @@ Vue.component('MessagistComponent', Messagist)
 ```
 你需要賦值給 `$websocket_url`  webosocket 的 位址
 
-你的vue檔 :
+專案底下任一vue檔 :
 ```html
 <template>
-  <div id="app">
+
     <MessagistComponent :websocket_url="$websocket_url">
 
     </MessagistComponent>
-  </div>
 </template>
 ```
 
