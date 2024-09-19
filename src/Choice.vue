@@ -2,12 +2,13 @@
   <div>
     <div class="row">
       <div class="col-9">
-        <input type="text" style="margin:10px" autocomplete="off"  class="el-input__inner"
+        
+        <input type="text" style="margin:10px" autocomplete="off"  class="el-input__inner" @keyup.enter="send"
           v-model="text" :ref="`textinput`" >
       </div>
       <div class="col-3 d-flex justify-content-center " style="
         margin-top: 10px;
-    "><button @click="send" style="
+    "><button @click="send"  style="
         height: 40px;
     " class="btn btn-light"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
             fill="#01afb8" height="50px" width="50px" version="1.1" id="Layer_1" viewBox="0 0 512 512"
@@ -53,7 +54,7 @@ export default {
     }
   },
   name: 'Choice',
-
+  emits: ['onSend'],
   props: {
     primaryKey: String,
     messagesId: Number

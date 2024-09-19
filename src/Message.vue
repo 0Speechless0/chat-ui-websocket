@@ -1,14 +1,18 @@
 <template lang="html">
 
-  <li :class="cssClass" v-if="!isHTML(message.text)">
+  <!-- <li :class="cssClass" v-if="!isHTML(message.text)"> -->
+    <li :class="cssClass" >
       <!-- <img src="../assets/image/user.jpg"/>  -->
-      <img  class="userImage" width="50"/>
+      <img  class="agencyImage" width="40"  height ="50" style="margin-top: auto;" v-if="message.author == 'system'"/>
+      <!-- <img  class="userImage" width="40"  height ="40" style="margin-top: auto;" v-else/> -->
       <span v-html="message.text" />
-      <div style="color:#b4b1b1">{{ message.createTime }} </div>
-  </li>
-  <div v-else v-html="message.text">
+      <div style="color:#b4b1b1; margin-top: auto; font-size: 12px; padding: 5px; max-width: 84px" v-if="message.createTime" >{{ message.createTime }} </div>
+      
+    </li>
+    
+  <!-- <div v-else v-html="message.text">
 
-  </div>
+  </div> -->
 </template>
 
 
@@ -36,9 +40,9 @@ export default {
   computed: {
     cssClass() {
       if(this.message.author == "system")
-        return `messagist__list-item-${this.message.author} `
+        return `messagist__list-item-${this.message.author} d-flex`
       else
-        return `messagist__list-item-${this.message.author} `
+        return `messagist__list-item-${this.message.author} d-flex flex-row-reverse`
     }
   },
   mounted()
@@ -51,6 +55,7 @@ export default {
 
 <style lang="stylus">
 @import '../assets/styles/userImage.css';
+@import '../assets/styles/agencyImage.css';
 color-system = aliceblue
 color-user = #b3e6a6
 transparent-body()

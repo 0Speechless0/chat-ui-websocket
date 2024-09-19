@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        <div class="modal-content fixed-bottom" style="width:500px;height:70%;  margin-left: auto; margin-right: 10%;">
+        <div class="modal-content fixed-bottom" style="width:500px;height:800px;  margin-left: auto; margin-right: 10%;">
             <div class="modal-header text-center" style="
             background-color: #01afb8;
             color: white;
@@ -14,12 +14,16 @@
                         aria-hidden="true">×</span></button>
             </div>
             <div class="modal-body" style="overflow: auto;  margin-bottom:100px; " ref="modalBody" id="content">
+                
                 <div>
                     <!-- <MessagistWrapper :claim="true" :messages="claim" v-if="messagesToPrintList.length == 0" :key="1">  </MessagistWrapper> -->
-                    <MessagistWrapper :messagesToPrintOrg="messagesToPrint" :claim="true" :messages="{}" v-for="(messagesToPrint, key) in messagesToPrintList" > </MessagistWrapper>
+                    <MessagistWrapper :messagesToPrintOrg="messagesToPrint" :claim="true" :messages="{}" v-for="(messagesToPrint, key) in messagesToPrintList" :key="key"> </MessagistWrapper>
                 </div>
                 <div v-for="(messages, key) in QAItem">
-                    <MessagistWrapper :key="key" @done="chatDone(key)" :messages="messages" :isNewDialog="true"> </MessagistWrapper>
+                    <MessagistWrapper 
+                    @scrollToBottom="scrollToBottom"
+                    :key="key" @done="chatDone(key)" :messages="messages" 
+                    :isNewDialog="messages.isNewDialog != null ? messages.isNewDialog : true"> </MessagistWrapper>
                 </div>
             </div>
         </div>
@@ -49,8 +53,16 @@ export default {
     emits : ["cancel"],
     data() {
         return {
+            messageSkip : 0,
+            messageCountOneTime : 20,
             visiable :true,
+            nextMessage : false,
+            totalMessageCount : 0,
             messagesToPrintList : [],
+            wheelCtl : {
+                lock : false,
+                time : 1000
+            },
             QAItem: [],
             claim : {
                 id: 0,
@@ -58,7 +70,7 @@ export default {
                     content: [
                         `為保護您的權益，請詳細閱讀「 隱私權及個人資料保護政策 」，如您已充分瞭解並同意，請繼續進行對談服務。
                         <br><br>
-                        點選 隱私權及個人資料保護政策如附件pdf`
+                        點選 <a href="#"> 隱私權及個人資料保護政策如附件pdf </a>`
                     ],
                     choices: {
                         accept: ''
@@ -72,6 +84,7 @@ export default {
     },
     watch :
     {
+
         QAItem :
         {
             handler(){
@@ -80,34 +93,100 @@ export default {
             flush : "post"
        
        
-        },
-        messagesToPrintList :
-        {
-            handler(v){
-                this.scrollToBottom()
-            },
-            flush : "post"
+        }
+        // ,        
+        // messagesToPrintList:
+        // {
+        //     handler(){
+        //         if(this.nextMessage)
+        //             this.scrollToTop()
+        //         else
+        //             this.scrollToBottom()
+        //     },
+        //     flush : "post"
        
-        },
+       
+        // }
+
     },
     props: {
         websocket_url: String,
         api_action : Object,
-        init_content : String
+        init_content : String,
+        test : Boolean,
     },
     components: {
         MessagistWrapper: MessagistWrapper
     },
     methods: {
-        scrollToBottom() {
+        GetUserMessages() 
+        {
+            let messagesToPrint = [];
+            if(this.totalMessageCount < this.messageSkip ) return 
+            if(this.nextMessage) 
+                this.messageSkip += this.messageCountOneTime;
+            Vue.prototype.$API.GetUserMessagesNewToOld(this.messageSkip, this.messageCountOneTime,
+            (resp ) => {
+                resp.data.list.reverse();
+                this.totalMessageCount = resp.data.count;
+                resp.data.list.forEach((message) => {
 
-            console.dir(this.$refs.modalBody )
-            console.log()
-            nextTick(() =>  this.$refs.modalBody.scrollTop = this.$refs.modalBody.scrollHeight)
-            console.log("fsdfsdf", this.$refs.modalBody , this.$refs.modalBody.scrollHeight);
+                    var obj = new MessageObject(message.Text, message.Origin == 0 ? 'system' : 'user' );
+                    obj.setDbItemData(message)
+                    messagesToPrint.push(obj);
+                })
+
+
+                if(!this.nextMessage)
+                {
+                    if(resp.data.count == 0 )
+                    {
+                        messagesToPrint.push( new MessageObject(this.claim.init.content[0]));
+                    }
+                    this.messagesToPrintList.push(messagesToPrint)
+                    this.scrollToBottom()
+
+
+                }
+                else if(resp.data.list.length > 0)
+                {
+                    var currentMessages = [messagesToPrint].concat(this.messagesToPrintList );
+                    this.messagesToPrintList = [];
+                    setTimeout(() => {
+                        nextTick(() => {
+                            this.messagesToPrintList = currentMessages
+                            console.log("currentMessages", this.messagesToPrintList)
+                            this.scrollToTop()
+    
+
+
+                        })
+                    }, 200);
+
+
+                }
+            }
+            
+        )
+
+        },
+        scrollToBottom() {
+            nextTick(() => { 
+                this.$refs.modalBody.scrollTop = this.$refs.modalBody.scrollHeight
+                this.currentScrollTop = this.$refs.modalBody.scrollTop
+            });
+        },
+        scrollToTop() {
+
+            nextTick(() => { 
+                this.$refs.modalBody.scrollTop = 0
+            });
         },
         chatDone(id) {
+            this.QAItem.forEach(e => e)
             messageInit.id = id;
+            if(this.QAItem.length > 1)
+                this.QAItem[this.QAItem.length -2 ].isNewDialog = false;
             this.QAItem.push(Object.assign({}, messageInit))
         }
     },
@@ -119,26 +198,28 @@ export default {
     mounted() {
         console.log("MessagistChat, mounted")
         Vue.prototype.$width = this.width
+        Vue.prototype.$test = this.test;
         this.claim.init.content[0] = this.init_content ; 
         console.log("initContent", this.claim.init.content[0]);
         this.QAItem.push(Object.assign({}, messageInit))
-        let messagesToPrint = []
-        Vue.prototype.$API.GetUserMessages(
-            (resp ) => {
-                resp.data.forEach((message) => {
-
-                    var obj = new MessageObject(message.Text, message.Origin == 0 ? 'system' : 'user' );
-                    obj.setCreateTime(message.CreateTIme)
-                    messagesToPrint.push(obj);
-                })
-                if(resp.data.length == 0 )
-                {
-                    messagesToPrint.push( new MessageObject(this.claim.init.content[0]));
-                }
+        this.GetUserMessages();
+        setTimeout(() => {
+            this.$refs.modalBody.addEventListener("wheel", event => {
+            console.log("fff", this.$refs.modalBody.scrollTop)
+            if(this.$refs.modalBody.scrollTop == 0 && !this.wheelCtl.lock )
+            {
+                this.wheelCtl.lock = true;
+                setTimeout(() => this.wheelCtl.lock = false, this.wheelCtl.time);
+                this.nextMessage = true;
+                this.GetUserMessages()
             }
-        )
+            else{
+                this.nextMessage = false;
+            }
+        });
+        }, 1000)
 
-        this.messagesToPrintList.push(messagesToPrint)
+
         new client().setWebSocketURL(this.websocket_url);
 
     },

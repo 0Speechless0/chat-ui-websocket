@@ -43,7 +43,6 @@ function  ws_send(msg) {
 
 
 
-  console.log("ws_send", msg)
   if( websocket == true ){
     // if ws is not open call open_ws, which will call ws_send back
     if( !ws || ws.readyState === undefined || ws.readyState > 1){
@@ -52,7 +51,9 @@ function  ws_send(msg) {
       ws.send( msg );
       console.log("ws_send sent");
     }
+    return true;
   }
+  return false;
 }
 
 module.exports = class WebSocketClient {
