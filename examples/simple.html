@@ -18,7 +18,7 @@
           開啟
       </button>
       {{messages.accept.content}}
-      <messagist websocket_url="https://59.126.242.4:8084/websocket" 
+      <messagist websocket_url="https://eqc.wra.gov.tw/websocket" 
 
       v-bind:init_content="                        `為保護您的權益，請詳細閱讀「 隱私權及個人資料保護政策 」，如您已充分瞭解並同意，請繼續進行對談服務。
               <br><br>
@@ -40,6 +40,10 @@
               .then((resp) => {
                 result(resp)
                 console.log("resp", resp)
+              })
+              .catch(e => {
+                console.log("resp error")
+                result({ data : {list : []} });
               });
 
             },
@@ -49,7 +53,11 @@
               .then((resp) => {
                 if(result)
                   result(resp);
+              })
+              .catch(e => {
+                result(null);
               });
+              ;
             },
             SuggestAgencyMessage(data)
             {
