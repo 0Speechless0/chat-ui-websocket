@@ -9,7 +9,7 @@ npm i
 
 ### 組件屬性說明(MessagistComponent)
 
-| 檔案| 說明 |
+| 屬性| 說明 |
 | ------| --------------------|
 | websocket_url | websocket位址 |
 | init_content | 使用者第一次使用時出現訊息 |
@@ -18,12 +18,12 @@ examples/simple.html 有範例
 
 ### 檔案功能說明
 
-| 檔案| 說明 |
+| 檔案 | 說明 |
 | ------| --------------------|
 | Message | 訊息框組件 |
 | Choice | 訊息發送框組件 |
 | MessageObject | 訊息物件，內含API回傳的轉換 |
-| MessagistChat | 主檔，列舉多個 MessagistChat組件 |
+| MessagistChat | 主檔，列舉多個 MessagistWrapper 組件 |
 | MessagistWrapper | 訊息問答組組件 |
 |Dot |    載入圖樣組件|
 ### 資料串接實作
