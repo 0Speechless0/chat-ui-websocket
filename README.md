@@ -34,8 +34,8 @@ examples/simple.html 有範例
      
         回傳 resp 格式如下
      
-         ```json
-         
+       ```json
+         {
          list :[
             {
                 "Seq" :  訊息ID
@@ -50,8 +50,8 @@ examples/simple.html 有範例
         
         
             ]
-        
-         ```
+        }
+       ```
 
    * skip : 跳過訊息數
    * count : 取得訊息數
